@@ -1,6 +1,6 @@
 
 import React from "react";
-import { TextInput, ActionIcon, useMantineTheme, Image } from '@mantine/core';
+import { TextInput, ActionIcon, useMantineTheme, Image, Notification, Affix, Transition } from '@mantine/core';
 import SearchSVG from "../Assets/Svgs/search.svg";
 import Backspace from "../Assets/Svgs/backspace.svg";
 
@@ -12,10 +12,15 @@ export function WalletSearch(props) {
   const { getNfts, isLoading, user } = React.useContext(AppContext);
 
   const [ value, setValue ] = React.useState("");
+  const [ error, setError ] = React.useState(false);
 
   const handleSubmit = async () => {
     if (value.length !== 0) {
-      await getNfts(value);
+      getNfts(value).then(() => {
+        setError(false);
+      }).catch((err) => {
+        setError(true);
+      });
     }
   }
 
@@ -26,10 +31,17 @@ export function WalletSearch(props) {
   React.useEffect(() => {
     if (user !== "") {
       setValue(user);
-    } else {
-
     }
-  }, [user])
+  }, [user]);
+
+  React.useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError(false);
+      }, 4500);
+      return () => clearTimeout(timer);
+    }
+  }, [error])
 
   return (
     <div style={{
@@ -80,6 +92,26 @@ export function WalletSearch(props) {
         })}
         {...props}
       />
+      <Affix position={{ top: 20, right: 10 }}>
+        <Transition transition="pop" mounted={error}>
+          {(transitionStyles) => (
+            <Notification
+              color="red"
+              style={transitionStyles}
+              title="Incorrect address"
+              styles={(theme) => ({
+                root: {
+                  border: "1px solid #DABDAD",
+                }
+              })}
+              onClose={() => setError(false)}
+            >
+              Must be a correct Solana address
+            </Notification>
+          )}
+        </Transition>
+      </Affix>
+      
     </div>
   );
 }

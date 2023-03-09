@@ -20,6 +20,9 @@ const useStyles = createStyles((theme) => ({
     alignItems: "center",
     gap: 20,
     width: "100%",
+  },
+  loaderWrapper: {
+    paddingTop: 150,
   }
 }));
 
@@ -36,7 +39,9 @@ const Home = () => {
           <NftsFrame />
         }
         {isLoading &&
-          <Loader variant="dots" color="dark" />
+        <div className={classes.loaderWrapper}>
+          <Loader style={{ marginTop: 20 }} variant="dots" size="xl" color="main" />
+        </div>
         }
       </div>
     </div>

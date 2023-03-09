@@ -5,6 +5,7 @@ import {
   createStyles,
   Group,
   Image,
+  Loader,
   Modal,
   Text,
 } from "@mantine/core";
@@ -36,6 +37,13 @@ const useStyles = createStyles((theme) => ({
     ":hover": {
       boxShadow: "0px 8px 1px -2px rgba(0, 0, 0, 0.25)",
     },
+  },
+  loaderWrapper: {
+    width: 150,
+    height: 180,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
   title: {
     maxWidth: 150,
@@ -185,6 +193,8 @@ const NftCard = ({ item }) => {
   const [address, setAddress] = React.useState("");
   const [owner, setOwner] = React.useState("");
 
+  const [loading, setLoading] = React.useState(false);
+
   React.useEffect(() => {
     if (nfts.length !== 0) {
       autoFetcher();
@@ -192,19 +202,24 @@ const NftCard = ({ item }) => {
   }, [nfts]);
 
   const autoFetcher = async () => {
+      setLoading(true);
       let nft = nfts.filter((nft) => nft.uri === item.uri)[0];
       let own = await getNftOwner(nft.mintAddress.toBase58());
       setAddress(nft.mintAddress.toBase58());
       setOwner(own);
-  };
+      setLoading(false);
+    };
 
   const matches = useMediaQuery('(min-width: 900px)');
 
   return (
     <>
-      <div className={classes.root} onClick={open}>
-        <Image src={item.image} className={classes.image} />
-        <Text className={classes.title}>{item.name}</Text>
+      <div className={classes.root} onClick={loading ? null : open}>
+        {loading && <div className={classes.loaderWrapper}><Loader variant="dots" size="md" color="main" /></div>}
+
+        {!loading && <Image src={item.image} className={classes.image} />}
+        {!loading && <Text className={classes.title}>{item.name}</Text>}
+        
       </div>
       <Modal
         opened={opened}

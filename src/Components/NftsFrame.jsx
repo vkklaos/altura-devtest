@@ -1,6 +1,7 @@
-import { createStyles, Image, ScrollArea, SimpleGrid, Skeleton } from "@mantine/core";
+import { Center, createStyles, Loader, ScrollArea, SimpleGrid } from "@mantine/core";
 import React from "react";
 import { AppContext } from "../Context";
+import NftCard from "./NftCard";
 
 
 const useStyles = createStyles((theme) => ({
@@ -9,7 +10,7 @@ const useStyles = createStyles((theme) => ({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    width: 940,
+    width: "80%",
     backgroundColor: "#EADDD6",
     border: '1px solid #E3CEC2',
     borderRadius: 9,
@@ -23,18 +24,55 @@ const useStyles = createStyles((theme) => ({
 
 const NftsFrame = () => {
   const { classes } = useStyles();
-  const { nfts, isLoading } = React.useContext(AppContext);
+  const { nfts, isLoading, user } = React.useContext(AppContext);
+
+  const [items, setItems] = React.useState([]);
+
+  React.useEffect(() => {
+    if (nfts.length !== 0) {
+      const uris = nfts.map((nft) => {
+        return nft.uri
+      });
+      Promise.all(
+          uris.filter((uri) => uri.startsWith("http")).map(async (uri) => {
+              let res = await fetch(uri);
+              let json = await res.json();
+              json.uri = uri;
+              return json;
+          })
+      ).then((json) => {
+          setItems(json);
+      }).catch((err) => {
+          console.log(err);
+          setItems([]);
+      })
+    }
+  }, [nfts])
 
   return (
     <div className={classes.root}>
       <ScrollArea h="65vh" style={{paddingRight: 50}} w="100%">
-        <Skeleton visible={isLoading}>
-          <SimpleGrid spacing={30} cols={4}>
-            {nfts && nfts.map((nft, index) => (
-              <Image key={index} src={nft.image} w={32} />
-            ))}
-          </SimpleGrid>
-        </Skeleton>
+          {isLoading &&
+            <Center>
+              <Loader variant="dots" color="dark" />
+            </Center>
+          }
+          {!isLoading && user !== "" &&
+            <SimpleGrid
+              cols={4}
+              spacing="lg"
+              breakpoints={[
+                { maxWidth: 'md', cols: 3, spacing: 'md' },
+                { maxWidth: 'sm', cols: 2, spacing: 'sm' },
+                { maxWidth: 'xs', cols: 1, spacing: 'sm' },
+              ]}
+            >
+              {items && items.map((nft, index) => (
+                <NftCard key={index} item={nft} />
+              ))}
+            </SimpleGrid>
+          }
+          
       </ScrollArea>
     </div>
   );

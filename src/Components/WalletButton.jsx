@@ -1,5 +1,5 @@
-import { Button, Menu, Text, useMantineTheme } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { Button, Menu, Text } from "@mantine/core";
+import { useClipboard } from "@mantine/hooks";
 import { useWallet } from "@solana/wallet-adapter-react";
 import {
   useWalletModal,
@@ -9,6 +9,7 @@ import React from "react";
 const WalletButton = () => {
   const { visible, setVisible } = useWalletModal();
   const { connected, connecting, disconnecting, disconnect, publicKey } = useWallet();
+  const clipboard = useClipboard({ timeout: 500 });
 
   const handleWallets = React.useCallback(
     (event) => {
@@ -24,27 +25,32 @@ const WalletButton = () => {
     [disconnect]
   );
 
-  const theme = useMantineTheme();
-
-  const [opened, { close }] = useDisclosure(false);
+  const handleClipboard = React.useCallback(() => {
+    clipboard.copy(publicKey.toBase58());
+  }, [publicKey, clipboard])
 
   return (
-    <Menu transition="pop-top-right" position="top-start" width={200} styles={(theme) => ({
+    <Menu transition="pop-top-right" position="top-center" width={200} styles={(theme) => ({
       dropdown: {
-        border: "none",
+        border: `1px solid ${theme.black}`,
+        backgroundColor: "#EADDD6",
+        borderRadius: 9,
+        
+      },
+      item: {
+        backgroundColor: "#EADDD6",
+        borderRadius: 9,
       }
     })}>
       <Menu.Target>
         <Button
           sx={{
-            color: theme.white,
-            backgroundColor: theme.black,
-            borderRadius: "11px",
+            borderRadius: "9px",
           }}
           // leftIcon={<IconWallet size={22} />}
         >
           {connected
-            ? (publicKey.toBase58().substring(0, 4) + "..." + publicKey.toBase58().substr(-4)).toUpperCase()
+            ? (publicKey.toBase58().substring(0, 4) + "...").toUpperCase()
             : connecting
             ? "Connecting...".toUpperCase()
             : disconnecting
@@ -56,9 +62,17 @@ const WalletButton = () => {
         connected ?
             <Menu.Dropdown>
               <Menu.Item
+                onClick={handleClipboard}
+                rightSection={
+                    <Text size="xs" transform="uppercase" weight={700}>
+                    Copy Address
+                    </Text>
+                }
+                />
+              <Menu.Item
                 onClick={handleLogout}
                 rightSection={
-                    <Text size="xs" transform="uppercase" weight={700} color="dimmed">
+                    <Text size="xs" transform="uppercase" weight={700}>
                     Log Out
                     </Text>
                 }
@@ -69,7 +83,7 @@ const WalletButton = () => {
                 <Menu.Item
                 onClick={handleWallets}
                 rightSection={
-                    <Text size="xs" transform="uppercase" weight={700} color="dimmed">
+                    <Text size="xs" transform="uppercase" weight={700}>
                     Select Wallets
                     </Text>
                 }

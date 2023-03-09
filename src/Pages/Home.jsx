@@ -1,8 +1,9 @@
-import { createStyles } from "@mantine/core";
 import React from "react";
-import { WalletSearch } from "../Components/WalletSearch";
+import { createStyles, Loader } from "@mantine/core";
+import { AppContext } from "../Context";
 import Header from "../Components/Header";
 import NftsFrame from "../Components/NftsFrame";
+import { WalletSearch } from "../Components/WalletSearch";
 
 
 const useStyles = createStyles((theme) => ({
@@ -11,19 +12,32 @@ const useStyles = createStyles((theme) => ({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    overflowX: "hidden",
   },
+  wrapper: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 20,
+    width: "100%",
+  }
 }));
 
 const Home = () => {
   const { classes } = useStyles();
+  const { isLoading, user } = React.useContext(AppContext);
 
   return (
     <div className={classes.root}>
       <Header />
-      <div>
+      <div className={classes.wrapper}>
         <WalletSearch />
-        <NftsFrame />
+        {!isLoading && user !== "" &&
+          <NftsFrame />
+        }
+        {isLoading &&
+          <Loader variant="dots" color="dark" />
+        }
       </div>
     </div>
   );

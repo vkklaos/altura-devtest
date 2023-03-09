@@ -1,6 +1,5 @@
 import React from "react";
 import { MantineProvider } from "@mantine/core";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./Pages/Home";
 import { AppStorage } from "./Context";
 
@@ -11,18 +10,28 @@ const App = () => {
         fontFamily: "Prompt, sans-serif",
         white: "#F2ECE9",
         black: "#3E271B",
-        primaryColor: "dark",
+        colors: {
+          main: [
+            "#D36327",
+            "#D36327",
+            "#D36327",
+            "#D36327",
+            "#D36327",
+            "#D36327",
+            "#D36327",
+            "#D36327",
+            "#D36327",
+            "#D36327",
+          ]
+        },
+        primaryColor: "main",
       }}
       withGlobalStyles
       withNormalizeCSS
     >
-      <BrowserRouter>
-        <AppStorage>
-          <Routes>
-            <Route path="/" element={<Home />} />
-          </Routes>
-        </AppStorage>
-      </BrowserRouter>
+      <AppStorage>
+        <Home />
+      </AppStorage>
     </MantineProvider>
   );
 };

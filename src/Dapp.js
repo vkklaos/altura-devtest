@@ -8,8 +8,8 @@ import App from './App';
 require('@solana/wallet-adapter-react-ui/styles.css');
 
 const Dapp = () => {
-  // const network = WalletAdapterNetwork.Mainnet;
-  const endpoint = React.useMemo(() => "https://solana-mainnet.g.alchemy.com/v2/hM51ynrZPDEtL_80Di-Kf6_RhQj24TKv", []);
+  const clusterUrl = "https://solana-mainnet.g.alchemy.com/v2/hM51ynrZPDEtL_80Di-Kf6_RhQj24TKv";
+  const endpoint = React.useMemo(() => clusterUrl, []);
   const wallets = React.useMemo(() => [
     new SolflareWalletAdapter(),
     new SolletExtensionWalletAdapter(),

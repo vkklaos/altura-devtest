@@ -7,10 +7,10 @@ const useStyles = createStyles((theme) => ({
   header: {
     width: "100%",
     display: "flex",
-    justifyContent: "flex-end",
+    justifyContent: "center",
     alignItems: "center",
     maxWidth: 1080,
-    padding: 15,
+    padding: 10,
   },
 }));
 

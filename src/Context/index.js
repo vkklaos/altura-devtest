@@ -15,35 +15,26 @@ export const AppStorage = ({ children }) => {
 
     const metaplex = Metaplex.make(connection);
 
-    const getNft = async (mint) => {
-        const nft = await metaplex.nfts().findByMint({mintAddress: new web3.PublicKey(mint)});
-        let res = await fetch(nft.uri);
-        let json = await res.json();
-        return json;
+    const getNftOwner = async (mint) => {
+        const largestAccounts = await connection.getTokenLargestAccounts(
+            new web3.PublicKey(mint)
+          );
+          const largestAccountInfo = await connection.getParsedAccountInfo(
+            largestAccounts.value[0].address
+          );
+        return largestAccountInfo.value.data.parsed.info.owner;
     }
 
+
     const getNfts = async (address) => {
+      let pkey = new web3.PublicKey(address);
+      if (web3.PublicKey.isOnCurve(pkey)) {
+        setNfts([]);
         setIsLoading(true);
-        console.log(address);
         const nfts = await metaplex.nfts().findAllByOwner({owner: new web3.PublicKey(address)});
-        const uris = nfts.map((nft) => {
-            return nft.uri
-        });
-        Promise.all(
-            uris.filter((uri) => uri.startsWith("http")).map(async (uri) => {
-                let res = await fetch(uri);
-                let json = await res.json();
-                return json;
-            })
-        ).then((json) => {
-            console.log(json);
-            setNfts(json);
-            setIsLoading(false);
-        }).catch((err) => {
-            setIsLoading(false);
-            console.log(err);
-            setNfts([]);
-        })
+        setNfts(nfts);
+        setIsLoading(false);
+      }
     }
 
     React.useEffect(() => {
@@ -59,6 +50,7 @@ export const AppStorage = ({ children }) => {
           value={{
             nfts,
             user,
+            getNftOwner,
             getNfts,
             isLoading,
           }}

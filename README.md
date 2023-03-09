@@ -23,6 +23,7 @@ As this is a web application that aims to make the user use the site several tim
 Using the shadow only on the Y axis with little blur and with the warm nature of the color, it will give the user the feeling that whenever he is using the site, it is 'noon'. Due to the warm color indicating that the light is coming from the sun, the shadow without X-axis deviation indicates that the sun is currently at the top of the 'sky'.
 
 =============================================
+
 React.js/Javascript/Frameworks:
 
 index.js:
@@ -56,6 +57,7 @@ WalletSearch.jsx:
 Using a Mantine.ScrollArea to maintain a 65% aspect of the viewport aiming to be functional on any device with a grid of 1 to 4 columns that render the 'NftCard.jsx' component.
 
 =============================================
+
 DevOps:
 
 CRA5

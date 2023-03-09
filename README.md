@@ -65,26 +65,26 @@ CRA5
 - Node.js: v18.15.0
 
 Package and versions:
-@emotion/react: v11.10.6
-@mantine/core: v5.10.5
-@mantine/hooks: v5.10.5
-@metaplex-foundation/js: v0.18.3
-@metaplex/js: v4.12.0
-@project-serum/anchor: v0.25.0
-@solana/spl-token: v0.3.5
-@solana/wallet-adapter-base: v0.9.22
-@solana/wallet-adapter-react: v0.15.30
-@solana/wallet-adapter-react-ui: v0.9.29
-@solana/wallet-adapter-wallets: v0.19.15
-@solana/web3.js: v1.73.3
-browserify-zlib: v0.2.0
-buffer: v6.0.3
-process: v0.11.10
-react: v18.2.0
-react-app-rewired: v2.2.1
-react-dom: v18.2.0
-react-router-dom: v6.4.1
-react-scripts: v5.0.1
-stream-browserify: v3.0.0
-typewriter-effect: v2.19.0
-web-vitals: v2.1.4
+- @emotion/react: v11.10.6
+- @mantine/core: v5.10.5
+- @mantine/hooks: v5.10.5
+- @metaplex-foundation/js: v0.18.3
+- @metaplex/js: v4.12.0
+- @project-serum/anchor: v0.25.0
+- @solana/spl-token: v0.3.5
+- @solana/wallet-adapter-base: v0.9.22
+- @solana/wallet-adapter-react: v0.15.30
+- @solana/wallet-adapter-react-ui: v0.9.29
+- @solana/wallet-adapter-wallets: v0.19.15
+- @solana/web3.js: v1.73.3
+- browserify-zlib: v0.2.0
+- buffer: v6.0.3
+- process: v0.11.10
+- react: v18.2.0
+- react-app-rewired: v2.2.1
+- react-dom: v18.2.0
+- react-router-dom: v6.4.1
+- react-scripts: v5.0.1
+- stream-browserify: v3.0.0
+- typewriter-effect: v2.19.0
+- web-vitals: v2.1.4

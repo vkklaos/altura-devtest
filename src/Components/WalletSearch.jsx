@@ -14,7 +14,8 @@ export function WalletSearch(props) {
   const [ value, setValue ] = React.useState("");
   const [ error, setError ] = React.useState(false);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     if (value.length !== 0) {
       getNfts(value).then(() => {
         setError(false);
@@ -44,7 +45,7 @@ export function WalletSearch(props) {
   }, [error])
 
   return (
-    <div style={{
+    <form onSubmit={handleSubmit} style={{
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
@@ -58,7 +59,7 @@ export function WalletSearch(props) {
       <TextInput
         rightSection={
           !isLoading &&  user !== "" &&
-          <ActionIcon onClick={handleSubmit} size={24} radius={9} color={theme.black} variant="filled">
+          <ActionIcon type="submit" size={24} radius={9} color={theme.black} variant="filled">
             <Image src={SearchSVG} w={11} />
           </ActionIcon>
         }
@@ -112,6 +113,6 @@ export function WalletSearch(props) {
         </Transition>
       </Affix>
       
-    </div>
+    </form>
   );
 }

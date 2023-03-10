@@ -40,7 +40,7 @@ const Home = () => {
         }
         {isLoading &&
         <div className={classes.loaderWrapper}>
-          <Loader style={{ marginTop: 20 }} variant="dots" size="xl" color="main" />
+          <Loader variant="dots" size="xl" color="main" />
         </div>
         }
       </div>

@@ -25,22 +25,24 @@ export const AppStorage = ({ children }) => {
         return largestAccountInfo.value.data.parsed.info.owner;
     }
 
-
     const getNfts = async (address) => {
       let pkey = new web3.PublicKey(address);
       if (web3.PublicKey.isOnCurve(pkey)) {
-        setNfts([]);
         setIsLoading(true);
-        const nfts = await metaplex.nfts().findAllByOwner({owner: new web3.PublicKey(address)});
-        setNfts(nfts);
-        setIsLoading(false);
+        await metaplex.nfts().findAllByOwner({owner: new web3.PublicKey(address)}).then((nfts) => {
+          setNfts(nfts);
+          setIsLoading(false);
+        }).catch((err) => {
+          console.log(err);
+          setIsLoading(false);
+        });
       }
     }
 
     React.useEffect(() => {
         if (connected && publicKey) {
-            setUser(publicKey.toBase58());
-            getNfts(publicKey.toBase58());
+          getNfts(publicKey.toBase58());
+          setUser(publicKey.toBase58());
         }
     }, [connected, publicKey])
 
@@ -53,6 +55,7 @@ export const AppStorage = ({ children }) => {
             getNftOwner,
             getNfts,
             isLoading,
+            setIsLoading,
           }}
         >
           {children}

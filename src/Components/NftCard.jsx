@@ -196,18 +196,21 @@ const NftCard = ({ item }) => {
   const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
-    if (nfts.length !== 0) {
-      autoFetcher();
+    if (nfts) {
+      if (nfts.length !== 0) {
+        autoFetcher();
+      }
     }
   }, [nfts]);
 
   const autoFetcher = async () => {
       setLoading(true);
       let nft = nfts.filter((nft) => nft.uri === item.uri)[0];
-      let own = await getNftOwner(nft.mintAddress.toBase58());
-      setAddress(nft.mintAddress.toBase58());
-      setOwner(own);
-      setLoading(false);
+      if (nft) {
+        setAddress(nft.mintAddress.toBase58());
+        setOwner(await getNftOwner(nft.mintAddress.toBase58()));
+        setLoading(false);
+      }
     };
 
   const matches = useMediaQuery('(min-width: 900px)');
@@ -286,17 +289,18 @@ const NftCard = ({ item }) => {
               }
             </div>
             <Text className={classes.modalDesc}>{item.description}</Text>
-            <div className={classes.traitsWrapper}>
-              {item.attributes.length !== 0 &&
-                item.attributes.map((trait, index) => (
-                  <div key={index} className={classes.trait}>
-                    <Text className={classes.traitTitle}>
-                      {trait.trait_type}
-                    </Text>
-                    <Text className={classes.traitDesc}>{trait.value}</Text>
-                  </div>
-                ))}
-            </div>
+            {item && item.attributes && item.attributes.length !== 0 &&
+              <div className={classes.traitsWrapper}>
+                {item.attributes.map((trait, index) => (
+                    <div key={index} className={classes.trait}>
+                      <Text className={classes.traitTitle}>
+                        {trait.trait_type}
+                      </Text>
+                      <Text className={classes.traitDesc}>{trait.value}</Text>
+                    </div>
+                  ))}
+              </div>
+            }
             <div className={classes.buyWrapper}>
               <Group>
                 <Button
